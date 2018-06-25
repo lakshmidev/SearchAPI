@@ -3,7 +3,7 @@ import csv
 from django.http import HttpResponse
 
 from django.shortcuts import render
-from django_filters import rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
 
 from searchapp.models import User, ApiReport
@@ -20,7 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     
     serializer_class = UserSerializer
-    filter_backends = (rest_framework.DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('email', 'date_joined')
     filter_fields = ('username', 'email')
 

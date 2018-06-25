@@ -14,9 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from adminplus.sites import AdminSitePlus
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from rest_framework import routers
+
+from searchapi import settings
 from searchapp import views
+
+admin.site = AdminSitePlus()
+admin.autodiscover()
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet, "Users")
@@ -24,9 +31,9 @@ router.register(r'users', views.UserViewSet, "Users")
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^report/$', views.generate_report, name='report'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
